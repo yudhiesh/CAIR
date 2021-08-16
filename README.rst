@@ -31,7 +31,12 @@ Features
 Credits
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+* This project is an implementation of `Content Aware Image Resizing in Javascript`_ by `Oleksii Trekhleb`_
+
+* This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _`Content Aware Image Resizing in Javascript`: https://trekhleb.dev/blog/2021/content-aware-image-resizing-in-javascript/
+.. _`Oleksii Trekhleb`: https://trekhleb.dev/
+
