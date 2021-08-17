@@ -1,3 +1,4 @@
+from pprint import pprint
 from cair_types import ImageOriginal
 
 
@@ -7,4 +8,4 @@ if __name__ == "__main__":
     img = io.img
     pixel_values = io.pixel_values
     image_size = io.image_size
-    img.show()
+    pprint(image_size)

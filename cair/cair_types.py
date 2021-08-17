@@ -1,17 +1,18 @@
-from pprint import pprint
 from PIL import Image
-from typing import NamedTuple, Optional, TypedDict
+from typing import Optional
 from dataclasses import dataclass
 
 
-class ImageSize(TypedDict):
-    """Dictionary of the image size which contains the width and height"""
+@dataclass
+class ImageSize:
+    """Image size which contains the width and height"""
 
     width: int
     height: int
 
 
-class Coordinate(TypedDict):
+@dataclass
+class Coordinate:
     """The coordinates of the pixels"""
 
     x: int
@@ -26,7 +27,8 @@ Seam = list[Coordinate]
 EnergyMap = list[list[int]]
 
 
-class Color(NamedTuple):
+@dataclass
+class Color:
     """NamedTuple of the color values(RGBA)"""
 
     red: int
