@@ -42,14 +42,13 @@ SingleImage = list[Color]
 
 
 @dataclass
-class ImageOriginal:
+class LoadImage:
     """
     Class that reads in the image and then outputs the image and the pixel
     values
     """
 
     img_path: str
-    to_width: int
 
     def __post_init__(self):
         self.img, self.pixel_values, self.image_size = self.run()  # type: ignore
