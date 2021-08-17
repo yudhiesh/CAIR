@@ -50,11 +50,16 @@ class ImageOriginal:
     to_width: int
 
     def __post_init__(self):
-        self.img, self.pixel_values = self.run()
+        self.img, self.pixel_values, self.image_size = self.run()  # type: ignore
 
-    def run(self) -> Optional[tuple[Image.Image, SingleImage]]:
+    def run(self) -> Optional[tuple[Image.Image, SingleImage, ImageSize]]:
         try:
-            img = Image.open(self.img_path)
+            # Convert the image to a RGBA image as it might be RGB
+            img = Image.open(self.img_path).convert("RGBA")
+            width, height = img.size
+            channels = len(img.getbands())
+            image_size = ImageSize(height=height, width=width)
+            print(f"Image shape: ({width},{height},{channels})")
             image_values = list(img.getdata())
             pixel_values = [
                 Color(
@@ -65,7 +70,7 @@ class ImageOriginal:
                 )
                 for pixel in image_values
             ]
-            return img, pixel_values
+            return img, pixel_values, image_size
         except IOError as e:
             print(f"Error when loading image: {e!r}")
 
@@ -76,11 +81,3 @@ class ImageProcessed:
 
     img: SingleImage
     size: ImageSize
-
-
-if __name__ == "__main__":
-    path = "../../Desktop/SMREITERATE2.png"
-    io = ImageOriginal(img_path=path, to_width=500)
-    img = io.img
-    pixel_values = io.pixel_values
-    pprint(pixel_values)
