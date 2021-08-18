@@ -1,7 +1,5 @@
-from pprint import pprint
-
 from PIL.Image import Image
-from cair_types import LoadImage, ImageSize, SingleImage
+from cair.cair_types import LoadImage, ImageSize, SingleImage
 
 
 class ResizeImageWidth:
