@@ -36,6 +36,11 @@ class Color:
     blue: int
     alpha: int
 
+    # cannot unpack dataclass by default so need to implement __iter__ to make
+    # it an Iterable
+    def __iter__(self):
+        return iter((self.red, self.green, self.blue, self.alpha))
+
 
 # A single image contains a sequence of Color
 SingleImage = list[Color]
