@@ -1,7 +1,7 @@
 import math
 from typing import Optional
 from PIL.Image import Image
-from cair.cair_types import Color, LoadImage, ImageSize, SingleImage
+from cair.cair_types import Color, Coordinate, LoadImage, ImageSize, SingleImage
 
 
 class ResizeImageWidth:
@@ -57,6 +57,13 @@ class ResizeImageWidth:
 
         return math.sqrt(left_energy + right_energy)
 
+    def __get_pixel(
+        self,
+        image: SingleImage,
+        coordinate: Coordinate,
+    ):
+        raise NotImplementedError()
+
 
 if __name__ == "__main__":
     path = "/Users/yravindranath/cair/cair/best-hot-air-balloon-rides-cappadocia-turkey.jpg"
@@ -64,9 +71,9 @@ if __name__ == "__main__":
     img = io.img
     pixel_values = io.pixel_values
     image_size = io.image_size
-    ResizeImageWidth(
-        img=img,
-        pixel_values=pixel_values,
-        image_size=image_size,
-        resize_to=500,
-    )
+    # ResizeImageWidth(
+    #     img=img,
+    #     pixel_values=pixel_values,
+    #     image_size=image_size,
+    #     resize_to=500,
+    # )

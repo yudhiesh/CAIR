@@ -1,3 +1,4 @@
+import numpy as np
 from PIL import Image
 from typing import Optional
 from dataclasses import dataclass
@@ -29,7 +30,7 @@ EnergyMap = list[list[int]]
 
 @dataclass
 class Color:
-    """NamedTuple of the color values(RGBA)"""
+    """Color values(RGBA)"""
 
     red: int
     green: int
@@ -43,7 +44,7 @@ class Color:
 
 
 # A single image contains a sequence of Color
-SingleImage = list[Color]
+SingleImage = list[list[list[Color]]]
 
 
 @dataclass
@@ -66,7 +67,13 @@ class LoadImage:
             channels = len(img.getbands())
             image_size = ImageSize(height=height, width=width)
             print(f"Image shape: ({width},{height},{channels})")
-            image_values = list(img.getdata())
+            image_pixels = (
+                np.asarray(list(img.getdata()))
+                .reshape(
+                    (width, height, -1),
+                )
+                .tolist()
+            )
             pixel_values = [
                 Color(
                     red=pixel[0],
@@ -74,9 +81,10 @@ class LoadImage:
                     blue=pixel[2],
                     alpha=pixel[3],
                 )
-                for pixel in image_values
+                for pixels in image_pixels
+                for pixel in pixels
             ]
-            return img, pixel_values, image_size
+            return img, pixel_values, image_size  # type: ignore
         except IOError as e:
             print(f"Error when loading image: {e!r}")
 
