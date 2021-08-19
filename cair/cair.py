@@ -1,10 +1,7 @@
 import math
 from typing import Any, Optional
 from PIL.Image import Image
-from cair.cair_types import Coordinate, LoadImage, ImageSize, SingleImage
-
-# Strange how the bottom one works but does not give me type defintions
-# from cair_types import Coordinate, LoadImage, ImageSize, SingleImage
+from cair_types import Coordinate, LoadImage, ImageSize, SingleImage
 
 
 class ResizeImageWidth:
