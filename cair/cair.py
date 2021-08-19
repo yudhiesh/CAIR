@@ -91,7 +91,7 @@ class ResizeImageWidth:
         """
         Creates a matrix of width and height with a filler value inside it
         """
-        matrix = [[fill_with for _ in range(height + 1)] for _ in range(width + 1)]
+        matrix = [[fill_with for _ in range(height)] for _ in range(width)]
         return matrix
 
 
