@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from typing import Optional
+from typing import NamedTuple, Optional
 from dataclasses import dataclass
 
 
@@ -28,8 +28,15 @@ Seam = list[Coordinate]
 EnergyMap = list[list[int]]
 
 
+class Color(NamedTuple):
+    red: int
+    green: int
+    blue: int
+    alpha: int
+
+
 # A single image contains a 3D list of ints
-SingleImage = list[list[list[int]]]
+SingleImage = list[list[list[Color]]]
 
 
 @dataclass

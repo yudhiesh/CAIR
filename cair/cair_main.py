@@ -19,7 +19,6 @@ class ResizeImageWidth:
         self.run()
 
     def run(self):
-        num_pixels_remove = self.__pixels_to_remove()
         ...
 
     def __pixels_to_remove(self) -> int:
@@ -31,32 +30,32 @@ class ResizeImageWidth:
             raise ValueError(error_message)
         return pixels
 
-    # def __get_pixel_energy(
-    #     self,
-    #     left: Optional[Color],
-    #     middle: Color,
-    #     right: Optional[Color],
-    # ) -> float:
-    #     middle_red, middle_green, middle_blue, middle_alpha = middle
-    #     left_energy, right_energy = 0, 0
-    #     if left:
-    #         left_red, left_green, left_blue, left_alpha = left
-    #         left_energy = (
-    #             ((left_red - middle_red) ** 2)
-    #             + ((left_green - middle_green) ** 2)
-    #             + ((left_blue - middle_blue) ** 2)
-    #             + ((left_alpha - middle_alpha) ** 2)
-    #         )
-    #     if right:
-    #         right_red, right_green, right_blue, right_alpha = right
-    #         right_energy = (
-    #             ((right_red - middle_red) ** 2)
-    #             + ((right_green - middle_green) ** 2)
-    #             + ((right_blue - middle_blue) ** 2)
-    #             + ((right_alpha - right_alpha) ** 2)
-    #         )
+    def __get_pixel_energy(
+        self,
+        left: Optional[list[int]],
+        middle: list[int],
+        right: Optional[list[int]],
+    ) -> float:
+        middle_red, middle_green, middle_blue, middle_alpha = middle
+        left_energy, right_energy = 0, 0
+        if left:
+            left_red, left_green, left_blue, left_alpha = left
+            left_energy = (
+                ((left_red - middle_red) ** 2)
+                + ((left_green - middle_green) ** 2)
+                + ((left_blue - middle_blue) ** 2)
+                + ((left_alpha - middle_alpha) ** 2)
+            )
+        if right:
+            right_red, right_green, right_blue, right_alpha = right
+            right_energy = (
+                ((right_red - middle_red) ** 2)
+                + ((right_green - middle_green) ** 2)
+                + ((right_blue - middle_blue) ** 2)
+                + ((right_alpha - right_alpha) ** 2)
+            )
 
-    #     return math.sqrt(left_energy + right_energy)
+        return math.sqrt(left_energy + right_energy)
 
     def __get_pixel(
         self,
