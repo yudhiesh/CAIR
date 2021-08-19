@@ -28,23 +28,8 @@ Seam = list[Coordinate]
 EnergyMap = list[list[int]]
 
 
-@dataclass
-class Color:
-    """Color values(RGBA)"""
-
-    red: int
-    green: int
-    blue: int
-    alpha: int
-
-    # cannot unpack dataclass by default so need to implement __iter__ to make
-    # it an Iterable
-    def __iter__(self):
-        return iter((self.red, self.green, self.blue, self.alpha))
-
-
-# A single image contains a sequence of Color
-SingleImage = list[list[list[Color]]]
+# A single image contains a 3D list of ints
+SingleImage = list[list[list[int]]]
 
 
 @dataclass
@@ -67,23 +52,14 @@ class LoadImage:
             channels = len(img.getbands())
             image_size = ImageSize(height=height, width=width)
             print(f"Image shape: ({width},{height},{channels})")
-            image_pixels = (
+            # Convert 1D image to 3D image
+            pixel_values = (
                 np.asarray(list(img.getdata()))
                 .reshape(
                     (width, height, -1),
                 )
                 .tolist()
             )
-            pixel_values = [
-                Color(
-                    red=pixel[0],
-                    green=pixel[1],
-                    blue=pixel[2],
-                    alpha=pixel[3],
-                )
-                for pixels in image_pixels
-                for pixel in pixels
-            ]
             return img, pixel_values, image_size  # type: ignore
         except IOError as e:
             print(f"Error when loading image: {e!r}")

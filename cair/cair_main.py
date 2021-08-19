@@ -1,7 +1,7 @@
 import math
 from typing import Optional
 from PIL.Image import Image
-from cair.cair_types import Color, Coordinate, LoadImage, ImageSize, SingleImage
+from cair.cair_types import Coordinate, LoadImage, ImageSize, SingleImage
 
 
 class ResizeImageWidth:
@@ -16,6 +16,11 @@ class ResizeImageWidth:
         self.pixel_values: SingleImage = pixel_values
         self.image_size: ImageSize = image_size
         self.resize_to = resize_to
+        self.run()
+
+    def run(self):
+        num_pixels_remove = self.__pixels_to_remove()
+        ...
 
     def __pixels_to_remove(self) -> int:
         pixels = self.image_size.width - self.resize_to
@@ -26,43 +31,48 @@ class ResizeImageWidth:
             raise ValueError(error_message)
         return pixels
 
-    def run(self):
-        num_pixels_remove = self.__pixels_to_remove()
-        ...
+    # def __get_pixel_energy(
+    #     self,
+    #     left: Optional[Color],
+    #     middle: Color,
+    #     right: Optional[Color],
+    # ) -> float:
+    #     middle_red, middle_green, middle_blue, middle_alpha = middle
+    #     left_energy, right_energy = 0, 0
+    #     if left:
+    #         left_red, left_green, left_blue, left_alpha = left
+    #         left_energy = (
+    #             ((left_red - middle_red) ** 2)
+    #             + ((left_green - middle_green) ** 2)
+    #             + ((left_blue - middle_blue) ** 2)
+    #             + ((left_alpha - middle_alpha) ** 2)
+    #         )
+    #     if right:
+    #         right_red, right_green, right_blue, right_alpha = right
+    #         right_energy = (
+    #             ((right_red - middle_red) ** 2)
+    #             + ((right_green - middle_green) ** 2)
+    #             + ((right_blue - middle_blue) ** 2)
+    #             + ((right_alpha - right_alpha) ** 2)
+    #         )
 
-    def __get_pixel_energy(
-        self,
-        left: Optional[Color],
-        middle: Color,
-        right: Optional[Color],
-    ) -> float:
-        middle_red, middle_green, middle_blue, middle_alpha = middle
-        left_energy, right_energy = 0, 0
-        if left:
-            left_red, left_green, left_blue, left_alpha = left
-            left_energy = (
-                ((left_red - middle_red) ** 2)
-                + ((left_green - middle_green) ** 2)
-                + ((left_blue - middle_blue) ** 2)
-                + ((left_alpha - middle_alpha) ** 2)
-            )
-        if right:
-            right_red, right_green, right_blue, right_alpha = right
-            right_energy = (
-                ((right_red - middle_red) ** 2)
-                + ((right_green - middle_green) ** 2)
-                + ((right_blue - middle_blue) ** 2)
-                + ((right_alpha - right_alpha) ** 2)
-            )
-
-        return math.sqrt(left_energy + right_energy)
+    #     return math.sqrt(left_energy + right_energy)
 
     def __get_pixel(
         self,
         image: SingleImage,
         coordinate: Coordinate,
     ):
-        raise NotImplementedError()
+        pixel = image[coordinate.x][coordinate.y]
+        return pixel
+
+    def __set_pixel(
+        self,
+        image: SingleImage,
+        coordinate: Coordinate,
+        color: list[int],
+    ):
+        image[coordinate.x][coordinate.y] = color
 
 
 if __name__ == "__main__":
@@ -71,9 +81,9 @@ if __name__ == "__main__":
     img = io.img
     pixel_values = io.pixel_values
     image_size = io.image_size
-    # ResizeImageWidth(
-    #     img=img,
-    #     pixel_values=pixel_values,
-    #     image_size=image_size,
-    #     resize_to=500,
-    # )
+    ResizeImageWidth(
+        img=img,
+        pixel_values=pixel_values,
+        image_size=image_size,
+        resize_to=500,
+    )
