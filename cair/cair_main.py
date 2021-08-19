@@ -1,5 +1,5 @@
 import math
-from typing import Optional
+from typing import Any, Optional
 from PIL.Image import Image
 from cair.cair_types import Coordinate, LoadImage, ImageSize, SingleImage
 
@@ -22,6 +22,10 @@ class ResizeImageWidth:
         ...
 
     def __pixels_to_remove(self) -> int:
+        """
+        Finds the number of pixels to remove to achieve the desired resized
+        image size(only works for width right now)
+        """
         pixels = self.image_size.width - self.resize_to
         if pixels <= 0:
             error_message = (
@@ -36,6 +40,10 @@ class ResizeImageWidth:
         middle: list[int],
         right: Optional[list[int]],
     ) -> float:
+        """
+        Gets the pixel energy of the middle pixel based on the pixels on the left
+        and on the right
+        """
         middle_red, middle_green, middle_blue, middle_alpha = middle
         left_energy, right_energy = 0, 0
         if left:
@@ -61,7 +69,10 @@ class ResizeImageWidth:
         self,
         image: SingleImage,
         coordinate: Coordinate,
-    ):
+    ) -> list[int]:
+        """
+        Gets the pixel values at a specific coordinate
+        """
         pixel = image[coordinate.x][coordinate.y]
         return pixel
 
@@ -70,8 +81,18 @@ class ResizeImageWidth:
         image: SingleImage,
         coordinate: Coordinate,
         color: list[int],
-    ):
+    ) -> None:
+        """
+        Sets a specific coordinate value in an image to a list of values
+        """
         image[coordinate.x][coordinate.y] = color
+
+    def __matrix(self, width: int, height: int, fill_with: Any) -> list[list[Any]]:
+        """
+        Creates a matrix of width and height with a filler value inside it
+        """
+        matrix = [[fill_with for _ in range(height + 1)] for _ in range(width + 1)]
+        return matrix
 
 
 if __name__ == "__main__":
