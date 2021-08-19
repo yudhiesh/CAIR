@@ -3,6 +3,9 @@ from typing import Any, Optional
 from PIL.Image import Image
 from cair.cair_types import Coordinate, LoadImage, ImageSize, SingleImage
 
+# Strange how the bottom one works but does not give me type defintions
+# from cair_types import Coordinate, LoadImage, ImageSize, SingleImage
+
 
 class ResizeImageWidth:
     def __init__(
@@ -96,7 +99,7 @@ class ResizeImageWidth:
 
 
 if __name__ == "__main__":
-    path = "/Users/yravindranath/cair/cair/best-hot-air-balloon-rides-cappadocia-turkey.jpg"
+    path = "./cair/best-hot-air-balloon-rides-cappadocia-turkey.jpg"
     io = LoadImage(img_path=path)
     img = io.img
     pixel_values = io.pixel_values
