@@ -1,4 +1,6 @@
 import math
+import numpy as np
+from pprint import pprint
 from typing import Any, Optional
 from PIL.Image import Image
 from cair_types import Coordinate, LoadImage, ImageSize, SingleImage
@@ -19,7 +21,10 @@ class ResizeImageWidth:
         self.run()
 
     def run(self):
-        ...
+        energy_map_image = self.__calculate_energy_map(
+            image=self.pixel_values,
+            image_size=self.image_size,
+        )
 
     def __pixels_to_remove(self) -> int:
         """
@@ -63,7 +68,7 @@ class ResizeImageWidth:
                 + ((right_alpha - right_alpha) ** 2)
             )
 
-        return math.sqrt(left_energy + right_energy)
+        return int(math.sqrt(left_energy + right_energy))
 
     def __get_pixel(
         self,
@@ -73,7 +78,18 @@ class ResizeImageWidth:
         """
         Gets the pixel values at a specific coordinate
         """
-        pixel = image[coordinate.x][coordinate.y]
+
+        # Issue indexing into image
+        assert (
+            coordinate.x >= 0
+        ), f"coordinate.x should be more than 0 but was : {coordinate.x}"
+        assert coordinate.y < len(
+            image
+        ), f"coordinate.y should be less than {len(image)} but was {coordinate.y}"
+        assert coordinate.x < len(
+            image[0]
+        ), f"coordinate.x should be less than {len(image[0])} but was {coordinate.x}"
+        pixel = image[coordinate.y][coordinate.x]
         return pixel
 
     def __set_pixel(
@@ -87,12 +103,73 @@ class ResizeImageWidth:
         """
         image[coordinate.x][coordinate.y] = color
 
-    def __matrix(self, width: int, height: int, fill_with: Any) -> list[list[Any]]:
+    def __matrix(
+        self,
+        width: int,
+        height: int,
+        fill_with: Any,
+    ) -> list[list[Any]]:
         """
         Creates a matrix of width and height with a filler value inside it
         """
-        matrix = [[fill_with for _ in range(height)] for _ in range(width)]
+        matrix = np.full((height, width), fill_value=fill_with).tolist()
+        assert (
+            len(matrix) == height
+        ), f"matrix should have {height} rows but has {len(matrix)}"
+        assert (
+            len(matrix[0]) == width
+        ), f"matrix should have {width} columns but has {len(matrix[0])}"
         return matrix
+
+    def __calculate_energy_map(
+        self,
+        image: SingleImage,
+        image_size: ImageSize,
+    ):
+        energy_map = self.__matrix(
+            width=len(image[0]),
+            height=len(image),
+            fill_with=None,
+        )
+        assert len(energy_map) == len(
+            image
+        ), f"energy map should have {len(image)} rows but has {len(energy_map)} rows"
+        assert len(energy_map[0]) == len(
+            image[0]
+        ), f"energy map should have {len(image[0])} columns but has {len(energy_map[0])} columns"
+        for y in range(len(image) - 1):
+            for x in range(len(image[0]) - 1):
+                left = (
+                    self.__get_pixel(
+                        image=image,
+                        coordinate=Coordinate(x=x - 1, y=y),
+                    )
+                    if (x - 1) >= 0
+                    else None
+                )
+                middle = self.__get_pixel(
+                    image=image,
+                    coordinate=Coordinate(
+                        x=x,
+                        y=y,
+                    ),
+                )
+                right = (
+                    self.__get_pixel(
+                        image=image,
+                        coordinate=Coordinate(x=x + 1, y=y),
+                    )
+                    if (x + 1) <= image_size.width
+                    else None
+                )
+                # Issue with indexing
+                pixel_energy = self.__get_pixel_energy(
+                    left=left,
+                    middle=middle,
+                    right=right,
+                )
+                energy_map[y][x] = pixel_energy
+        return energy_map
 
 
 if __name__ == "__main__":
