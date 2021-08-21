@@ -1,6 +1,5 @@
 import math
 import numpy as np
-from pprint import pprint
 from typing import Any, Optional
 from PIL.Image import Image
 from cair_types import Coordinate, LoadImage, ImageSize, SingleImage
@@ -159,7 +158,8 @@ class ResizeImageWidth:
                         image=image,
                         coordinate=Coordinate(x=x + 1, y=y),
                     )
-                    if (x + 1) <= image_size.width
+                    # Not sure if this is correct
+                    if (x + 1) <= len(image[0]) - 1
                     else None
                 )
                 # Issue with indexing
